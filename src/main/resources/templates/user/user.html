@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Page</title>
+    <style>
+        .make-order-button {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #ff9800;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .make-order-button:hover {
+            background-color: #ffac33;
+        }
+
+        .make-order-button:active {
+            transform: translateY(1px);
+            box-shadow: none;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 20%;
+            background-color: #343a40;
+            color: white;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .sidebar h2 {
+            color: #ffc107;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            flex-grow: 1;
+            padding: 5px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        .search-button {
+            background-color: #ffc107;
+            border: none;
+            color: #343a40;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .nav-item {
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+        .nav-item.selected {
+            background-color: #ffc107;
+            color: #343a40;
+        }
+
+        .nav-item:hover {
+            background-color: #ffc107;
+            color: #343a40;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+        }
+
+        h2 {
+            color: #343a40;
+            text-align: center;
+        }
+
+        .basket, .product-details {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .basket-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .basket-table th, .basket-table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        .total-price {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .basket-product-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+
+        .product-image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .product-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            border: 2px solid #ccc;
+        }
+
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .amount-button {
+            background-color: #ffc107;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            color: #343a40;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .amount-button:hover {
+            background-color: #e6a700;
+        }
+        .product-details-container {
+            display: flex;
+            align-items: flex-start;
+        }
+        .product-image-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 20px;
+        }
+        .amount-controls {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .amount-button {
+            margin: 0 5px;
+        }
+        .add-button {
+            margin-top: 10px;
+            padding: 15px 30px;
+            background-color: #ffcc00;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: normal;
+        }
+        .add-button:hover {
+            background-color: #e6b800;
+        }
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 40px 0;
+        }
+        .divider-line {
+            flex-grow: 1;
+            border: 0;
+            height: 1px;
+            background: #ccc;
+        }
+        .divider-text {
+            margin: 0 15px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="sidebar">
+        <h2>Categories</h2>
+        <form action="/user" method="get">
+            <div class="search-bar">
+                <label>
+                    <input type="text" name="pattern" placeholder="Search Categories">
+                </label>
+                <button class="search-button" type="submit">Search</button>
+            </div>
+        </form>
+        <ul>
+            <th:block th:each="cat : ${categories}">
+                <li class="nav-item" th:classappend="${cat.getId().equals(category.getId())} ? ' selected' : ''">
+                    <a style="color: white" th:href="'/user?categoryId=' + ${cat.getId()}" th:text="${cat.name}"></a>
+                </li>
+            </th:block>
+        </ul>
+    </div>
+    <div class="sidebar">
+        <h2>Products</h2>
+        <form action="/user" method="get">
+            <div class="search-bar">
+                <label>
+                    <input name="product-pattern" type="text" placeholder="Search Products">
+                </label>
+                <button type="submit" class="search-button">Search</button>
+            </div>
+        </form>
+        <ul>
+            <th:block th:each="prod: ${products}">
+                <li class="nav-item" th:classappend="${prod.getId().equals(product.getId())} ? ' selected' : ''">
+                    <a style="color: white" th:href="'/user?productId=' + ${prod.getId()}" th:text="${prod.name}"></a>
+                </li>
+            </th:block>
+        </ul>
+    </div>
+    <div class="content">
+        <!-- Part 1: List of Products in the Basket -->
+        <div class="basket">
+            <h2>Your Basket</h2>
+            <table class="basket-table">
+                <thead>
+                <tr>
+                    <th>Product Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Amount</th>
+                    <th>Total Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="basketProduct : ${basket.products}">
+                    <td><img th:attr="src='data:image/png;base64,' + ${basketProduct.getBase64Photo()}" alt="Product Image" class="basket-product-image"></td>
+                    <td th:text="${basketProduct.product.getName()}"></td>
+                    <td th:text="${basketProduct.getProduct().getRetailPrice() + ' sum'}"></td>
+                    <td th:text="${basketProduct.getAmount()}"></td>
+                    <td th:text="${(basketProduct.product.getRetailPrice() * basketProduct.getAmount()) + ' sum'}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="total-price">
+                <span>Total Price:</span>
+                <span th:text="${totalPrice + ' sum'}"></span>
+            </div>
+            <!-- Creative "Make Order" Button -->
+            <form action="/order/make" method="post">
+                <button type="submit" class="make-order-button">Make Order</button>
+            </form>
+        </div>
+        <div class="divider">
+            <hr class="divider-line">
+            <span class="divider-text">Product Details</span>
+            <hr class="divider-line">
+        </div>
+        <!-- Part 2: Details of the Selected Product -->
+        <div class="product-details" th:if="${productProj != null}">
+            <div class="product-details-container">
+                <div class="product-image-container">
+                    <img th:attr="src='data:image/png;base64,' + ${productProj.base64Photo()}" alt="Product Image" class="product-image">
+                    <div class="amount-controls">
+                        <a href="/basket/increase" class="amount-button">+</a>
+                        <span id="product-amount" th:text="${chosenProduct.getAmount()}"></span>
+                        <a href="/basket/decrease" class="amount-button">-</a>
+                    </div>
+                    <form action="/basket/add" method="post">
+                        <button type="submit" class="add-button">Add</button>
+                    </form>
+
+                </div>
+                <div class="product-info">
+                    <label for="product-name" style="font-weight: bold">Name</label>
+                    <p id="product-name" th:text="${productProj.name}">Product Name</p>
+                    <label for="product-price" style="font-weight: bold">Price</label>
+                    <p id="product-price" th:text="${productProj.price + ' sum'}">$0.00</p>
+                    <label for="remaining" style="font-weight: bold">Remaining</label>
+                    <p id="remaining" th:text="${remaining}">0</p>
+                    <label for="total-price" style="font-weight: bold">Total price</label>
+                    <p id="total-price" th:text="${(productProj.getPrice() * chosenProduct.getAmount()) + ' sum'}">$0.00</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

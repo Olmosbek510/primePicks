@@ -1,16 +1,15 @@
 package uz.primepicks.primepicks.security;
 
-import jakarta.servlet.FilterChain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.stereotype.Controller;
 
 @EnableWebSecurity
 @Configuration
@@ -21,18 +20,21 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
+        security.csrf(AbstractHttpConfigurer::disable);
         security.userDetailsService(customUserDetailsService);
         security.authorizeHttpRequests(manager ->
-                manager.requestMatchers("/admin")
-                        .hasRole("ROLE_ADMIN")
-                        .requestMatchers("/user").hasRole("ROLE_USER")
-                        .requestMatchers("/sales").hasRole("ROLE_SALES_MANAGER")
-                        .anyRequest().authenticated());
+                manager.requestMatchers("/login","/register")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated());
         security.formLogin(login -> {
+            login.loginPage("/login")
+                    .defaultSuccessUrl("/");
         });
         return security.build();
     }
 
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }

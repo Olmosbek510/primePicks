@@ -2,6 +2,7 @@ package uz.primepicks.primepicks.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
@@ -16,6 +17,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@Table(name = "users")
 public class User extends BaseEntity implements UserDetails{
     private String firstName;
     private String lastName;

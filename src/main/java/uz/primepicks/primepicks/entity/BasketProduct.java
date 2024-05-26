@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class BasketProduct {
     private Product product;
     private Integer amount;
+    private String base64Photo;
 }

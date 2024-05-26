@@ -3,13 +3,16 @@ package uz.primepicks.primepicks.entity;
 import jakarta.persistence.*;
 import jdk.jfr.DataAmount;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import uz.primepicks.primepicks.entity.enums.RoleName;
 
 @Entity
 @Data
 @AllArgsConstructor
+@Builder
 @NoArgsConstructor
 @Table(name = "roles")
 public class Role implements GrantedAuthority {
@@ -17,10 +20,11 @@ public class Role implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(unique = true)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private RoleName name;
 
     @Override
     public String getAuthority() {
-        return this.name;
+        return this.name.toString();
     }
 }

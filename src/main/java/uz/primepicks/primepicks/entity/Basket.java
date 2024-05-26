@@ -13,5 +13,5 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class Basket {
-    private List<BasketProduct> basketProducts = new ArrayList<>();
+    private List<BasketProduct> products = new ArrayList<>();
 }

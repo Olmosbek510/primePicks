@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Product</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid #ffc107;
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        h1 {
+            color: #343a40;
+            text-align: center;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #343a40;
+        }
+
+        input[type="text"], select, input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus, select:focus, input[type="file"]:focus {
+            outline: none;
+            border-color: #ffc107;
+            box-shadow: 0 0 5px rgba(255, 193, 7, 0.5);
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .button {
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .add-button {
+            background-color: #ffc107;
+            color: #343a40;
+        }
+
+        .add-button:hover {
+            background-color: #e6a700;
+        }
+
+        .cancel-button {
+            background-color: #343a40;
+            color: #ffc107;
+        }
+
+        .cancel-button:hover {
+            background-color: #2d2f33;
+        }
+
+        input[type="file"] {
+            border: none;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="form-container">
+        <h1>Add New Product</h1>
+        <form action="/product/add" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="product-name">Product Name</label>
+                <input type="text" id="product-name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="text" id="price" name="retailPrice" required>
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" name="categoryId" required>
+                    <option value="" disabled selected>Choose category</option>
+                    <th:block th:each="category: ${categories}">
+                        <option th:value="${category.id}" th:text="${category.name}">Electronics</option>
+                    </th:block>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="product-photo">Product Photo</label>
+                <input type="file" id="product-photo" name="product-photo" accept="image/*" required>
+            </div>
+            <div class="button-group">
+                <button type="submit" class="button add-button">Add Product</button>
+                <a href="/admin" type="button" class="button cancel-button">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

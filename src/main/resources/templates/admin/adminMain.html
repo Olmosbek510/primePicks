@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Management Page</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid #ffc107;
+        }
+
+        .management-button {
+            width: 200px;
+            padding: 15px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #343a40;
+            background-color: #ffc107;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .management-button:hover {
+            background-color: #e6a700;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <form action="/admin">
+        <button type="submit" class="management-button" >Warehouse Management</button>
+    </form>
+    <form action="/admin/report">
+        <button type="submit" class="management-button">Report</button>
+    </form>
+</div>
+</body>
+</html>
