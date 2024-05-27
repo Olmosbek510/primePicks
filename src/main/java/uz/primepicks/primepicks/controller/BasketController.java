@@ -7,18 +7,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import uz.primepicks.primepicks.entity.Basket;
 import uz.primepicks.primepicks.entity.BasketProduct;
 import uz.primepicks.primepicks.repo.ProductRepo;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("basket")
 @RequiredArgsConstructor
 public class BasketController {
     private final ProductRepo productRepo;
-
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/increase")
     public String increase(HttpSession session) {
@@ -66,6 +67,17 @@ public class BasketController {
                 basket.getProducts().add(basketProduct);
             }
             session.removeAttribute("chosenProduct");
+        }
+        return "redirect:/user";
+    }
+
+    @PostMapping("remove")
+    public String remove(@RequestParam(name = "productId", required = false) UUID uuid, HttpSession session){
+        Object o = session.getAttribute("basket");
+        if (o!=null) {
+            Basket basket = (Basket) o;
+            basket.getProducts().removeIf(basketProduct -> basketProduct.getProduct().getId().equals(uuid));
+            session.setAttribute("basket", basket);
         }
         return "redirect:/user";
     }

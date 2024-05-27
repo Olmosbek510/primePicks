@@ -231,6 +231,20 @@
         .view-past-orders-form {
             margin-bottom: 20px;
         }
+        .delete-button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 10px 20px;  /* Reduced padding */
+            font-size: 14px;     /* Smaller font size */
+            border-radius: 4px;  /* Slightly smaller border radius */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-button:hover {
+            background-color: #e60000;
+        }
 
     </style>
 </head>
@@ -288,6 +302,7 @@
                     <th>Price</th>
                     <th>Amount</th>
                     <th>Total Price</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -297,6 +312,14 @@
                     <td th:text="${basketProduct.getProduct().getRetailPrice() + ' sum'}"></td>
                     <td th:text="${basketProduct.getAmount()}"></td>
                     <td th:text="${(basketProduct.product.getRetailPrice() * basketProduct.getAmount()) + ' sum'}"></td>
+                    <td>
+                        <form action="/basket/remove" method="post">
+                            <label>
+                                <input type="hidden" name="productId" th:value="${basketProduct.product.id}">
+                            </label>
+                            <button type="submit" class="delete-button">Delete Product</button>
+                        </form>
+                    </td>
                 </tr>
                 </tbody>
             </table>
