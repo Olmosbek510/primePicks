@@ -29,7 +29,7 @@ public class AdminController {
     private final IncomeRepo incomeRepo;
     private final OrderProductRepo orderProductRepo;
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_AMDIN', 'ROLE_SALES_MANAGER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SALES_MANAGER')")
     public String admin(Model model,
                         @RequestParam(name = "categoryId", required = false) UUID categoryId,
                         @RequestParam(name = "productId", required = false) UUID productId,
