@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order List</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .orders {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 800px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .orders-table th, .orders-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .orders-table th {
+            background-color: #f2f2f2;
+        }
+
+        .info-button, .back-button {
+            background-color: #007bff;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            color: white;
+            text-transform: uppercase;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-button:hover, .back-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .back-form {
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+<div class="orders">
+    <h2>Your Orders</h2>
+
+    <table class="orders-table">
+        <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Order Date</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="${order.id}">12345</td>
+            <td th:text="${order.getFormattedDate()}">2024-05-26</td>
+            <td>
+                <form action="/order/info" method="get">
+                    <input type="hidden" name="orderId" th:value="${order.id}">
+                    <button type="submit" class="info-button">Get Info</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <form action="/user" method="get" class="back-form">
+        <button type="submit" class="back-button">Back</button>
+    </form>
+</div>
+</body>
+</html>

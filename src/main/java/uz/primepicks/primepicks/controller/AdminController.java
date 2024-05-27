@@ -2,7 +2,6 @@ package uz.primepicks.primepicks.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Request;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +11,11 @@ import uz.primepicks.primepicks.entity.Category;
 import uz.primepicks.primepicks.entity.Income;
 import uz.primepicks.primepicks.entity.OrderProduct;
 import uz.primepicks.primepicks.entity.Product;
+import uz.primepicks.primepicks.projection.BalanceProjection;
+import uz.primepicks.primepicks.projection.ProductProfitProjection;
 import uz.primepicks.primepicks.projection.ProductProjection;
-import uz.primepicks.primepicks.repo.CategoryRepo;
-import uz.primepicks.primepicks.repo.IncomeRepo;
-import uz.primepicks.primepicks.repo.OrderProductRepo;
-import uz.primepicks.primepicks.repo.ProductRepo;
+import uz.primepicks.primepicks.projection.SalesReportProjection;
+import uz.primepicks.primepicks.repo.*;
 
 import java.util.*;
 
@@ -28,7 +27,6 @@ public class AdminController {
     private final ProductRepo productRepo;
     private final IncomeRepo incomeRepo;
     private final OrderProductRepo orderProductRepo;
-
     @GetMapping
     public String admin(Model model,
                         @RequestParam(name = "categoryId", required = false) UUID categoryId,
@@ -37,9 +35,9 @@ public class AdminController {
                         @RequestParam(name = "pattern", required = false) String pattern,
                         @RequestParam(name = "product-pattern", required = false) String prodPattern,
                         @RequestParam(name = "want", required = false) String want
-                        ) {
+    ) {
         List<Category> categories = categoryRepo.findAll();
-        if(!Objects.equals(pattern, null)){
+        if (!Objects.equals(pattern, null)) {
             categories = categoryRepo.findAllByNameContainingIgnoreCase(pattern);
         }
         model.addAttribute("categories", categories);
@@ -55,8 +53,8 @@ public class AdminController {
         }
         products = productRepo.findALlByCategoryIdOrderByName(category.getId());
         model.addAttribute("category", category);
-        if(!products.isEmpty()){
-            if(prodPattern!=null){
+        if (!products.isEmpty()) {
+            if (prodPattern != null) {
                 products.removeIf(product -> !product.getName().toLowerCase().contains(prodPattern.toLowerCase()));
             }
             model.addAttribute("products", products);
@@ -67,13 +65,13 @@ public class AdminController {
         if (productId != null) {
             product = productRepo.findById(productId).get();
             session.setAttribute("currentProduct", product);
-        } else if (session.getAttribute("currentProduct")!=null) {
+        } else if (session.getAttribute("currentProduct") != null) {
             product = (Product) session.getAttribute("currentProduct");
         }
         ProductProjection productProjection = productRepo.findProductProjById(product.getId());
         model.addAttribute("productProj", productProjection);
         model.addAttribute("product", product);
-        if(Objects.equals(want, "income")){
+        if (Objects.equals(want, "income")) {
             List<Income> incomeList = incomeRepo.findAllByProductId(product.getId());
             model.addAttribute("incomes", incomeList);
         } else if (Objects.equals(want, "sales")) {
@@ -87,7 +85,36 @@ public class AdminController {
     }
 
     @GetMapping("/report")
-    public String report(){
+    public String report(
+            @RequestParam(name = "want", required = false) String want,
+            Model model
+    ) {
+        want = want == null ? "" : want;
+        System.out.println("want: " + want);
+        model.addAttribute("want", want);
+        switch (want) {
+            case "sales" -> {
+                List<SalesReportProjection> report = productRepo.getReport();
+                model.addAttribute("reports", report);
+            }
+            case "balance" -> {
+                List<Product> products = productRepo.findAll();
+                List<BalanceProjection> balanceProjections = new ArrayList<>();
+                for (Product product : products) {
+                    balanceProjections.add(new BalanceProjection(product.getName(), productRepo.getRemainingById(product.getId()) == null ? 0 : productRepo.getRemainingById(product.getId())));
+                    balanceProjections.sort(Comparator.comparingInt(BalanceProjection::remaining));
+                }
+                model.addAttribute("balance", balanceProjections);
+            }
+            case "profit" -> {
+                List<SalesReportProjection> report = productRepo.getReport();
+                List<ProductProfitProjection> profits = new ArrayList<>();
+                for (SalesReportProjection salesReportProjection : report) {
+                    profits.add(productRepo.getProfitByProductId(salesReportProjection.getId(), salesReportProjection.getAmount()));
+                }
+                model.addAttribute("profits", profits);
+            }
+        }
         return "admin/report";
     }
 }

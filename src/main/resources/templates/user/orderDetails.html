@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Products</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .order-details {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 900px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 24px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .order-products-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .order-products-table th, .order-products-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .order-products-table th {
+            background-color: #f2f2f2;
+            font-size: 18px;
+        }
+
+        .order-products-table td {
+            font-size: 16px;
+        }
+
+        .product-image {
+            max-width: 70px;
+            max-height: 70px;
+            border-radius: 5px;
+        }
+
+        .back-form {
+            text-align: center;
+        }
+
+        .back-button {
+            background-color: #28a745;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            color: white;
+            text-transform: uppercase;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .back-button:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+    </style>
+</head>
+<body>
+<div class="order-details">
+    <h2>Order Details</h2>
+
+    <table class="order-products-table">
+        <thead>
+        <tr>
+            <th>Photo</th>
+            <th>Amount</th>
+            <th>Price</th>
+            <th>Total Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${orderProducts}">
+            <td><img th:attr="src='data:image/png;base64,' + ${product.get64Photo()}" alt="Product Image" class="product-image"></td>
+            <td th:text="${product.amount}">2</td>
+            <td th:text="${product.price + ' sum'}">10000 sum</td>
+            <td th:text="${product.price * product.amount + ' sum'}">20000 sum</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <form action="/order" method="get" class="back-form">
+        <button type="submit" class="back-button">Back to Orders</button>
+    </form>
+</div>
+</body>
+</html>

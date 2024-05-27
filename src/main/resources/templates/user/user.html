@@ -4,21 +4,24 @@
     <meta charset="UTF-8">
     <title>User Page</title>
     <style>
-        .make-order-button {
-            padding: 15px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #fff;
-            background-color: #ff9800;
+        .view-past-orders-button, .make-order-button {
+            background-color: #ffac33;
             border: none;
-            border-radius: 25px;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            color: white;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 20px;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .make-order-button:hover {
+        .view-past-orders-button:hover, .make-order-button:hover {
             background-color: #ffac33;
+            transform: scale(1.05);
         }
 
         .make-order-button:active {
@@ -137,19 +140,17 @@
             border-radius: 5px;
             object-fit: cover;
         }
-
+        .product-image {
+            max-width: 200px;
+            border: 2px solid #ffc107;
+            border-radius: 5px;
+        }
         .product-image-container {
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        .product-image {
-            width: 150px;
-            height: 150px;
-            border-radius: 10px;
-            border: 2px solid #ccc;
-        }
 
         .product-info {
             display: flex;
@@ -162,19 +163,22 @@
             background-color: #ffc107;
             border: none;
             border-radius: 5px;
-            padding: 10px;
-            font-size: 18px;
+            padding: 5px; /* Reduced padding */
+            font-size: 16px; /* Slightly smaller font size */
             cursor: pointer;
             color: #343a40;
-            width: 40px;
-            height: 40px;
+            width: 30px; /* Reduced width */
+            height: 30px; /* Reduced height */
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: background-color 0.3s, transform 0.3s; /* Added transition for smooth hover effect */
+            margin: 0 5px; /* Added margin to create space between buttons and count */
         }
 
         .amount-button:hover {
-            background-color: #e6a700;
+            background-color: #e0a800; /* Slightly darker background on hover */
+            transform: scale(1.1); /* Slight scaling effect on hover */
         }
         .product-details-container {
             display: flex;
@@ -191,9 +195,7 @@
             align-items: center;
             margin-top: 10px;
         }
-        .amount-button {
-            margin: 0 5px;
-        }
+
         .add-button {
             margin-top: 10px;
             padding: 15px 30px;
@@ -225,6 +227,11 @@
             font-weight: bold;
             color: #555;
         }
+
+        .view-past-orders-form {
+            margin-bottom: 20px;
+        }
+
     </style>
 </head>
 <body>
@@ -269,6 +276,10 @@
         <!-- Part 1: List of Products in the Basket -->
         <div class="basket">
             <h2>Your Basket</h2>
+            <!-- "View Past Orders" Button -->
+            <form action="/order" method="get" class="view-past-orders-form">
+                <button type="submit" class="view-past-orders-button">View Past Orders</button>
+            </form>
             <table class="basket-table">
                 <thead>
                 <tr>
@@ -309,9 +320,9 @@
                 <div class="product-image-container">
                     <img th:attr="src='data:image/png;base64,' + ${productProj.base64Photo()}" alt="Product Image" class="product-image">
                     <div class="amount-controls">
-                        <a href="/basket/increase" class="amount-button">+</a>
-                        <span id="product-amount" th:text="${chosenProduct.getAmount()}"></span>
                         <a href="/basket/decrease" class="amount-button">-</a>
+                        <span id="product-amount" th:text="${chosenProduct.getAmount()}"></span>
+                        <a href="/basket/increase" class="amount-button">+</a>
                     </div>
                     <form action="/basket/add" method="post">
                         <button type="submit" class="add-button">Add</button>

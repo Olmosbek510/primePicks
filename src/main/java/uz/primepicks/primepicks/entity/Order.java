@@ -23,7 +23,6 @@ public class Order extends BaseEntity {
     private User user;
     @CreationTimestamp
     private LocalDateTime time;
-
     public String getFormattedDate(){
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy, HH:mm");
         return dateTimeFormatter.format(this.time);

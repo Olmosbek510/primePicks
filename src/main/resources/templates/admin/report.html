@@ -2,9 +2,189 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Report</title>
+    <title>Admin Report Page</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .admin-report-page {
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .report-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .report-button {
+            padding: 15px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: #ffc107;
+            color: #fff;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .report-button:hover {
+            background-color: #ffc107;
+            transform: translateY(-2px);
+        }
+
+        .report-tables {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .report-table {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .styled-table th,
+        .styled-table td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .styled-table thead {
+            background-color: #ffc107;
+            color: #ffffff;
+        }
+
+        .styled-table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .basket-product-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+    </style>
 </head>
 <body>
-    <h1>Report page</h1>
+<div class="admin-report-page">
+    <!-- First Part: Buttons -->
+    <div class="report-buttons">
+        <form action="/admin/report" method="get">
+            <input type="hidden" value="sales" name="want">
+            <button type="submit" class="report-button">Sales Report</button>
+        </form>
+        <form action="/admin/report" method="get">
+            <input type="hidden" value="balance" name="want">
+            <button type="submit" class="report-button">Balance Report</button>
+        </form>
+        <form action="/admin/report" method="get">
+            <input type="hidden" value="profit" name="want">
+            <button type="submit" class="report-button">Profit</button>
+        </form>
+        <form action="/admin">
+            <button class="report-button" type="submit">Warehouse Management</button>
+        </form>
+    </div>
+    <!-- Second Part: Tables -->
+    <div class="report-tables">
+        <!-- Sales Report Table -->
+        <div id="sales" class="report-table" th:if="${want == 'sales'}">
+            <h2>Sales Report</h2>
+            <table class="styled-table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Amount</th>
+                    <th>Total Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Sample Data -->
+                <th:block th:each="repo: ${reports}">
+                    <tr>
+                        <td th:text="${repo.getName()}"></td>
+                        <td th:text="${repo.getPrice()}"></td>
+                        <td th:text="${repo.getAmount()}"></td>
+                        <td th:text="${repo.getTotal()}"></td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Balance Report Table -->
+        <div id="balance" class="report-table" th:if="${want == 'balance'}">
+            <h2>Balance Report</h2>
+            <table class="styled-table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Balance</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Sample Data -->
+                <th:block th:each="bal: ${balance}">
+                    <tr>
+                        <td th:text="${bal.name()}"></td>
+                        <td th:text="${bal.remaining()}"></td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Profit Table -->
+        <div id="profit" class="report-table" th:if="${want == 'profit'}">
+            <h2>Profit</h2>
+            <table class="styled-table">
+                <thead>
+                <tr>
+                    <th>Photo</th>
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <th>Retail Price</th>
+                    <th>Total sales</th>
+                    <th>Profit</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Sample Data -->
+                <th:block th:each="profit: ${profits}">
+                    <tr>
+                        <td>
+                            <img th:attr="src='data:image/png;base64,' + ${profit.getBase64Photo()}"
+                                 alt="Product Image" class="basket-product-image">
+                        </td>
+                        <td th:text="${profit.getName()}"></td>
+                        <td th:text="${profit.getAmount()}"></td>
+                        <td th:text="${profit.getPrice()}"></td>
+                        <td th:text="${profit.getTotalSales()}"></td>
+                        <td th:text="${profit.getProfit()}"></td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 </body>
 </html>
