@@ -2,6 +2,7 @@ package uz.primepicks.primepicks.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import java.util.Objects;
 public class BasketController {
     private final ProductRepo productRepo;
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/increase")
     public String increase(HttpSession session) {
         Object o = session.getAttribute("chosenProduct");
@@ -32,7 +34,7 @@ public class BasketController {
         }
         return "redirect:/user";
     }
-
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/decrease")
     public String decrease(HttpSession session) {
         Object o = session.getAttribute("chosenProduct");
@@ -45,6 +47,7 @@ public class BasketController {
         return "redirect:/user";
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("add")
     public String add(HttpSession session) {
         Object basketObj = session.getAttribute("basket");

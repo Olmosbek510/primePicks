@@ -1,6 +1,7 @@
 package uz.primepicks.primepicks.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class ProductController {
     private final CategoryRepo categoryRepo;
     private final AttachmentRepo attachmentRepo;
     private final AttachmentContentRepo attachmentContentRepo;
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("add")
     public String add(Model model) {
         List<Category> categories = categoryRepo.findAll();
@@ -35,6 +36,7 @@ public class ProductController {
         return "product/addProduct";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
     public String add(@ModelAttribute Product product,
                       @RequestParam(name = "product-photo") MultipartFile photo,
@@ -53,6 +55,7 @@ public class ProductController {
         return "redirect:/admin";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/edit/{id}")
     public String edit(@PathVariable("id") UUID productId, @ModelAttribute Product product){
         Optional<Product> optionalProduct = productRepo.findById(productId);

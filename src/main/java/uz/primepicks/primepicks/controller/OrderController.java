@@ -60,6 +60,7 @@ public class OrderController {
     }
 
     @GetMapping("/info")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public String getInfo(@RequestParam(name = "orderId")UUID orderId, Model model){
         List<OrderProductProjection> orderProducts = orderProductRepo.findAllByOrderId(orderId);
         model.addAttribute("orderProducts", orderProducts);

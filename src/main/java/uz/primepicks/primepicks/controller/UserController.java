@@ -2,6 +2,7 @@ package uz.primepicks.primepicks.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,7 @@ public class UserController {
     private final CategoryRepo categoryRepo;
     private final ProductRepo productRepo;
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping()
     public String user(Model model,
                        @RequestParam(name = "categoryId", required = false) UUID categoryId,

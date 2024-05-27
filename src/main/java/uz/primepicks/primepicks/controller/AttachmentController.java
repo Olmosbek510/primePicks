@@ -1,6 +1,7 @@
 package uz.primepicks.primepicks.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import java.util.UUID;
 public class AttachmentController {
     private final AttachmentContentRepo attachmentContentRepo;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/set/{id}")
     public String set(@PathVariable("id") UUID id, @RequestParam(name = "photo") MultipartFile photo) throws IOException {
         AttachmentContent attachmentContentRepoById = attachmentContentRepo.findAttachmentContentByAttachmentId(id);

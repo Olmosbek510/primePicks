@@ -1,6 +1,7 @@
 package uz.primepicks.primepicks.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,11 +15,14 @@ import uz.primepicks.primepicks.repo.CategoryRepo;
 @RequiredArgsConstructor
 public class CategoryController {
     private final CategoryRepo categoryRepo;
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("add")
     public String add(){
         return "/category/addCategory";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
     public String add(@ModelAttribute Category category){
         categoryRepo.save(category);

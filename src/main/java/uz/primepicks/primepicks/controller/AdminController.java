@@ -2,6 +2,7 @@ package uz.primepicks.primepicks.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,7 @@ public class AdminController {
     private final IncomeRepo incomeRepo;
     private final OrderProductRepo orderProductRepo;
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_AMDIN', 'ROLE_SALES_MANAGER')")
     public String admin(Model model,
                         @RequestParam(name = "categoryId", required = false) UUID categoryId,
                         @RequestParam(name = "productId", required = false) UUID productId,
@@ -83,7 +85,7 @@ public class AdminController {
         model.addAttribute("want", want);
         return "/admin/admin";
     }
-
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SALES_MANAGER')")
     @GetMapping("/report")
     public String report(
             @RequestParam(name = "want", required = false) String want,

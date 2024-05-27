@@ -23,10 +23,14 @@ public class AuthController {
     private final RoleRepo roleRepo;
     private final PasswordEncoder passwordEncoder;
     @GetMapping("/register")
+    @PreAuthorize("!hasAnyRole('ROLE_ADMIN', 'ROLE_SALES_MANAGER', 'ROLE_USER')")
     public String register(){
         return "auth/register";
     }
+
+
     @PostMapping("/register")
+    @PreAuthorize("!hasAnyRole('ROLE_ADMIN', 'ROLE_SALES_MANAGER', 'ROLE_USER')")
     public String register(@ModelAttribute User user){
         Role role = roleRepo.findByName(RoleName.ROLE_SALES_MANAGER);
         user.setRoles(List.of(role));
@@ -35,6 +39,7 @@ public class AuthController {
         userRepo.save(user);
         return "redirect:/";
     }
+
     @PreAuthorize("!hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SALES_MANAGER')")
     @GetMapping("/login")
     public String login(){

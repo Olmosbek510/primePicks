@@ -1,6 +1,7 @@
 package uz.primepicks.primepicks.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ public class IncomeController {
     private final ProductRepo productRepo;
     private final IncomeRepo incomeRepo;
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SALES_MANAGER')")
     @GetMapping("/make/{productId}")
     public String make(@PathVariable("productId") UUID productId, Model model){
         Optional<Product> product = productRepo.findById(productId);
@@ -27,6 +29,7 @@ public class IncomeController {
     }
 
     @PostMapping("create/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SALES_MANAGER')")
     public String make(@PathVariable("id") UUID uuid, @ModelAttribute Income income){
         Optional<Product> product = productRepo.findById(uuid);
         product.ifPresent(income::setProduct);

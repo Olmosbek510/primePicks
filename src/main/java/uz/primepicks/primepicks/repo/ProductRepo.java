@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ProductRepo extends JpaRepository<Product, UUID> {
-    @Query("select p from Product  p order by p.name")
-    List<Product> findAllOrderByName();
 
     List<Product> findALlByCategoryIdOrderByName(UUID categoryId);
 
