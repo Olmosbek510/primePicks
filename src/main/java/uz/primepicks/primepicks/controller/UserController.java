@@ -79,8 +79,7 @@ public class UserController {
                 .product(product)
                 .build();
         Integer remaining = productRepo.getRemainingById(product.getId());
-        basketProduct.setAmount(Objects.equals(remaining, null) ? 0 : 1);
-        remaining = remaining!=null? remaining : 0;
+        basketProduct.setAmount(remaining == 0 ? 0 : 1);
         model.addAttribute("remaining", remaining);
         if (productProjection != null) {
             basketProduct.setBase64Photo(productProjection.base64Photo());

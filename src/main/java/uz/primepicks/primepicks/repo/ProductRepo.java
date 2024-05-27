@@ -18,10 +18,13 @@ public interface ProductRepo extends JpaRepository<Product, UUID> {
     ProductProjection findProductProjById(UUID uuid);
 
     @Query(nativeQuery = true, value = """
-                select (sum(i.amount) -
-                        (select sum(o.amount) from order_product o where o.product_id = :id))
-                from income i
-                where i.product_id = :id
+               select coalesce(
+                    (sum(i.amount) -
+                    (select coalesce(sum(o.amount), 0) from order_product o where o.product_id = :id)
+                    ), 0
+                        )
+                    from income i
+                    where i.product_id = :id
             """)
     Integer getRemainingById(UUID id);
 

@@ -19,6 +19,7 @@ import uz.primepicks.primepicks.projection.SalesReportProjection;
 import uz.primepicks.primepicks.repo.*;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 @Controller
 @RequestMapping("/admin")

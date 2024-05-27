@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Report Page</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -178,7 +177,7 @@
                         <td th:text="${profit.getAmount()}"></td>
                         <td th:text="${profit.getPrice()}"></td>
                         <td th:text="${profit.getTotalSales()}"></td>
-                        <td th:text="${profit.getProfit()}"></td>
+                        <td th:text="${profit.getProfit() != null ? profit.getProfit() : 0}"></td>
                     </tr>
                 </th:block>
                 </tbody>
