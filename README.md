@@ -1,5 +1,5 @@
 PrimePicks
-PrimePicks is a comprehensive e-commerce web application developed using the Spring Framework. It leverages Spring MVC for handling web requests, Thymeleaf for rendering HTML views, Spring Security for securing the application, and Spring Data JPA with Hibernate for database interactions. All routes within this application are authorized based on user roles.
+PrimePicks is a robust e-commerce web application developed using Spring Boot. It features secure authentication and authorization with Spring Security, efficient database management with Spring Data JPA and Hibernate, and a user-friendly UI built with Spring MVC and Thymeleaf. The application supports different user roles, each with specific permissions and functionalities.
 
 Table of Contents
 Features
@@ -7,22 +7,22 @@ Technologies Used
 Installation
 Usage
 Configuration
+User Roles
 Contributing
 License
 Features
-Role-based access control
-Secure authentication and authorization using Spring Security
-Dynamic HTML content rendering with Thymeleaf
-Efficient database operations with Spring Data JPA and Hibernate
-RESTful web services
-MVC architecture
+Role-based Access Control: Different functionalities based on user roles (ROLE_USER, ROLE_ADMIN, ROLE_SALES_MANAGER).
+Secure Authentication and Authorization: Powered by Spring Security.
+Dynamic HTML Content Rendering: Using Thymeleaf for responsive and interactive web pages.
+Efficient Database Operations: Managed with Spring Data JPA and Hibernate.
+MVC Architecture: Ensures a clean separation of concerns.
 Technologies Used
-Spring Framework: Core framework used for building the application.
-Spring MVC: Used for handling web requests and implementing the MVC pattern.
+Spring Boot: Core framework for the application.
+Spring MVC: Handles web requests and implements the MVC pattern.
 Thymeleaf: Template engine for rendering HTML views.
-Spring Security: Provides authentication and authorization mechanisms.
-Spring Data JPA: Simplifies database interactions.
-Hibernate: ORM library for database operations.
+Spring Security: Provides authentication and authorization.
+Spring Data JPA: Simplifies database operations.
+Hibernate: ORM library for database interactions.
 Java: Programming language used for development.
 Maven: Build automation tool.
 Installation
@@ -57,6 +57,10 @@ spring.datasource.password=yourpassword
 Security
 User roles and security configurations are defined in src/main/java/com/primepicks/config/SecurityConfig.java.
 Modify the security configuration to match your requirements.
+User Roles
+ROLE_USER: Standard user functionalities such as browsing products, adding to cart, and making purchases.
+ROLE_ADMIN: Administrative functionalities including managing products, user activities, and performing administrative tasks.
+ROLE_SALES_MANAGER: Sales management functionalities including overseeing sales data and managing customer relationships.
 Contributing
 Fork the repository.
 Create a new branch:
