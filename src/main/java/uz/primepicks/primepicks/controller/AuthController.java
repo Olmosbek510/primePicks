@@ -32,7 +32,7 @@ public class AuthController {
     @PostMapping("/register")
     @PreAuthorize("!hasAnyRole('ROLE_ADMIN', 'ROLE_SALES_MANAGER', 'ROLE_USER')")
     public String register(@ModelAttribute User user){
-        Role role = roleRepo.findByName(RoleName.ROLE_SALES_MANAGER);
+        Role role = roleRepo.findByName(RoleName.ROLE_USER);
         user.setRoles(List.of(role));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         System.out.println("New User registration: " + user);

@@ -20,6 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BasketController {
     private final ProductRepo productRepo;
+
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/increase")
     public String increase(HttpSession session) {
@@ -30,11 +31,11 @@ public class BasketController {
             if (remaining != null && remaining > basketProduct.getAmount()) {
                 basketProduct.setAmount(basketProduct.getAmount() + 1);
             }
-
             session.setAttribute("chosenProduct", basketProduct);
         }
         return "redirect:/user";
     }
+
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/decrease")
     public String decrease(HttpSession session) {
@@ -56,11 +57,12 @@ public class BasketController {
         if (basketObj != null && productObj != null) {
             BasketProduct basketProduct = (BasketProduct) productObj;
             Basket basket = (Basket) basketObj;
-
             if (basketProduct.getAmount() != 0) {
                 for (BasketProduct product : basket.getProducts()) {
-                    if (product.getProduct().getId().equals(basketProduct.getProduct().getId())) {
+                    if (product.getProduct().getId().equals(basketProduct.getProduct().getId()) && product.getAmount() < productRepo.getRemainingById(product.getProduct().getId())) {
                         product.setAmount(product.getAmount() + basketProduct.getAmount());
+                        return "redirect:/user";
+                    }else {
                         return "redirect:/user";
                     }
                 }
@@ -72,9 +74,9 @@ public class BasketController {
     }
 
     @PostMapping("remove")
-    public String remove(@RequestParam(name = "productId", required = false) UUID uuid, HttpSession session){
+    public String remove(@RequestParam(name = "productId") UUID uuid, HttpSession session) {
         Object o = session.getAttribute("basket");
-        if (o!=null) {
+        if (o != null) {
             Basket basket = (Basket) o;
             basket.getProducts().removeIf(basketProduct -> basketProduct.getProduct().getId().equals(uuid));
             session.setAttribute("basket", basket);
